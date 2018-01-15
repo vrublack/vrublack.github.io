@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Klatsch-Eingabe</title>
+    <script src="clapdetect.js" type="text/javascript"></script>
+    <link rel="stylesheet" type="text/css" href="clap-input.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+</head>
+<body>
+
+<div style="white-space: nowrap" class="card">
+
+    <span id="current-letter"></span>
+    <span id="next-letters"></span>
+    <div style="margin-top: 20px;"><img style="margin: 0 10px 0 0;"
+                                        src="clap-hands.png"/><span>zum verlangsamen, dann</span><img
+            style="margin: 0 10px 0 10px;" src="clap-hands.png"/><span>zum annehmen</span></div>
+</div>
+
+<div id="previous-text" class="card"></div>
+
+<span id="credit">Icon from <a href="https://www.flaticon.com/free-icon/clap-hands_109638" style="color: gray;">www.flaticon.com</a></span>
+
+
+<script>
+
+    var curr_letter = document.getElementById("current-letter");
+    var next_letters = document.getElementById("next-letters");
+    var prev_text = document.getElementById("previous-text");
+    var next_letters_data = "";
+    var slow_down = false;
+    var change_speed = false;
+    var timer = null;
+    var timout_timer;
+
+    var INITIAL_DELAY = 2000;
+    var FAST_DELAY = 100;
+    var SLOW_DELAY = 800;
+
+    var startInput = function ()
+    {
+        curr_letter.innerHTML = "_";
+        next_letters_data = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        next_letters.innerHTML = next_letters_data;
+        slow_down = false;
+        change_speed = false;
+
+        // longer time in the beginning so it's possible to accept an 'A'
+        clearTimeout(timout_timer);
+        timout_timer = setTimeout(shift, INITIAL_DELAY);
+        timer = null;
+    };
+
+    // shift letters to the left
+    var shift = function ()
+    {
+        if (next_letters_data.length >= 1)
+        {
+            curr_letter.innerText = next_letters_data[0];
+            next_letters_data = next_letters_data.substr(1);
+            next_letters.innerText = next_letters_data;
+        }
+
+        if (!timer)
+            timer = setInterval(shift, slow_down ? SLOW_DELAY : FAST_DELAY);
+        else if (change_speed)
+        {
+            clearInterval(timer);
+            timer = setInterval(shift, SLOW_DELAY);
+        }
+        change_speed = false;
+    };
+
+    startInput();
+
+    var acceptLetter = function (c)
+    {
+        if (c === "_")
+            c = " ";
+        console.log("Accepted letter " + c);
+        prev_text.innerHTML = prev_text.innerHTML + c;
+        startInput();
+    };
+
+    var rec = new Recording(function (data)
+    {
+        if (detectClap(data))
+        {
+            console.log('clap!');
+            if (!slow_down)
+            {
+                slow_down = true;
+                change_speed = true;
+            } else
+            {
+                clearInterval(timer);
+                timer = null;
+                acceptLetter(curr_letter.innerHTML);
+            }
+        }
+    });
+</script>
+
+</body>
+</html>

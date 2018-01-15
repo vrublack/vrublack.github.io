@@ -1,0 +1,38 @@
+body {
+    background: #b9b9b9;
+    font-family: sans-serif;
+}
+
+.card {
+    max-width: 685px;
+    margin: 20px auto 20px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 0 1px 2px #aaa;
+}
+
+#current-letter {
+    font-size: 60px;
+    margin-left: 10px;
+    color: #0087ff;
+}
+
+#next-letters {
+    color: #b9b9b9;
+    overflow: hidden;
+    font-size: 40px;
+    letter-spacing: 15px;
+    margin-left: 20px;
+}
+#previous-text {
+    font-size: 20px;
+    min-height: 50px;
+}
+
+#credit {
+    font-size: 13px;
+    position: absolute;
+    right: 20px;
+    bottom: 20px;
+}
