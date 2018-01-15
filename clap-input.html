@@ -11,8 +11,10 @@
 
 <div style="white-space: nowrap" class="card">
 
-    <span id="current-letter"></span>
-    <span id="next-letters"></span>
+
+    <span id="start" onclick="startAll()">Start</span>
+    <span style="visibility: collapse" id="current-letter"></span>
+    <span style="visibility: collapse" id="next-letters"></span>
     <div style="margin-top: 20px;"><img style="margin: 0 10px 0 0;"
                                         src="clap-hands.png"/><span>zum verlangsamen, dann</span><img
             style="margin: 0 10px 0 10px;" src="clap-hands.png"/><span>zum annehmen</span></div>
@@ -37,6 +39,15 @@
     var INITIAL_DELAY = 2000;
     var FAST_DELAY = 100;
     var SLOW_DELAY = 800;
+
+    var startAll = function ()
+    {
+        document.getElementById("start").style.display = "none";
+        curr_letter.style.visibility = "visible";
+        next_letters.style.visibility = "visible";
+
+        startInput();
+    };
 
     var startInput = function ()
     {
@@ -72,8 +83,6 @@
         change_speed = false;
     };
 
-    startInput();
-
     var acceptLetter = function (c)
     {
         if (c === "_")
@@ -83,23 +92,38 @@
         startInput();
     };
 
+    var detectedClap = function ()
+    {
+        console.log('clap!');
+        if (!slow_down)
+        {
+            slow_down = true;
+            change_speed = true;
+        } else
+        {
+            clearInterval(timer);
+            timer = null;
+            acceptLetter(curr_letter.innerHTML);
+        }
+    };
+
     var rec = new Recording(function (data)
     {
         if (detectClap(data))
         {
-            console.log('clap!');
-            if (!slow_down)
-            {
-                slow_down = true;
-                change_speed = true;
-            } else
-            {
-                clearInterval(timer);
-                timer = null;
-                acceptLetter(curr_letter.innerHTML);
-            }
+            detectedClap();
         }
     });
+
+    // accept space (in case audio doesn't work)
+    document.body.onkeyup = function (e)
+    {
+        if (e.keyCode === 32)
+        {
+            detectedClap();
+        }
+    }
+
 </script>
 
 </body>

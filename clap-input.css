@@ -12,6 +12,17 @@ body {
     box-shadow: 0 1px 2px #aaa;
 }
 
+#start {
+    cursor: pointer;
+    font-size: 40px;
+    margin-left: 10px;
+    color: #0087ff;
+}
+
+#start:hover {
+    color: #9bccff;
+}
+
 #current-letter {
     font-size: 60px;
     margin-left: 10px;
