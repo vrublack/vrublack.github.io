@@ -34,6 +34,7 @@
     var slow_down = false;
     var change_speed = false;
     var timer = null;
+    var started = false;
     var timout_timer;
 
     var INITIAL_DELAY = 2000;
@@ -42,6 +43,7 @@
 
     var startAll = function ()
     {
+        started = true;
         document.getElementById("start").style.display = "none";
         curr_letter.style.visibility = "visible";
         next_letters.style.visibility = "visible";
@@ -94,6 +96,9 @@
 
     var detectedClap = function ()
     {
+        if (!started)
+            return;
+
         console.log('clap!');
         if (!slow_down)
         {
