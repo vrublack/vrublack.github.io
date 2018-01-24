@@ -53,7 +53,7 @@ function detectClap(data)
     var zeroCrossings = 0, highAmp = 0;
     for (var i = 1; i < data.length; i++)
     {
-        if (Math.abs(data[i]) > 0.05) highAmp++; // TWEAK HERE
+        if (Math.abs(data[i]) > 0.8) highAmp++; // TWEAK HERE
         if (data[i] > 0 && data[i - 1] < 0 || data[i] < 0 && data[i - 1] > 0) zeroCrossings++;
     }
     if (highAmp > 15 && zeroCrossings > 20)
